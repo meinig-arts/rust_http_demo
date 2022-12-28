@@ -1,5 +1,5 @@
 use actix_web::{web, App, HttpRequest, HttpServer, Responder};
-use actix_web::{ HttpResponse};
+use actix_web::{ HttpResponse, get};
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()>{
@@ -7,7 +7,7 @@ async fn main() -> std::io::Result<()>{
     App::new()
     .route("/", web::get().to(greet))
     .route("/{name}", web::get().to(greet))
-    .route("/sus/sus", web::get().to(htmlgreet))
+    .service(htmlgreet)
   })
   .bind("127.0.0.1:8000")?
   .run()
@@ -19,6 +19,7 @@ async fn greet(req: HttpRequest) -> impl Responder {
   format!("Hello {}!", name)  // no semicolon here
 }
 
+#[get("/sus/sus")]
 async fn htmlgreet(_req: HttpRequest) -> impl Responder {
   HttpResponse::Ok()
   .content_type("text/html; charset=utf-8")
