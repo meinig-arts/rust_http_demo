@@ -1,5 +1,6 @@
 use actix_web::{web, App, HttpRequest, HttpServer, Responder};
 use actix_web::{ HttpResponse, get};
+use actix_files as fs;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()>{
@@ -8,6 +9,7 @@ async fn main() -> std::io::Result<()>{
     .route("/", web::get().to(greet))
     .route("/{name}", web::get().to(greet))
     .service(htmlgreet)
+    .service(fs::Files::new("/static/files", ".").show_files_listing())
   })
   .bind("127.0.0.1:8000")?
   .run()
